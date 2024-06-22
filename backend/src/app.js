@@ -1,6 +1,7 @@
 import express from "express";
 import { config } from "dotenv";
 import cors from "cors";
+import morgan from "morgan";
 
 config({
   path: "./src/.env",
@@ -9,6 +10,8 @@ config({
 // ENV Constants
 const PORT = process.env.PORT || 4000;
 const MONGO_URI = process.env.MONGO_URI || "";
+
+console.log(MONGO_URI);
 
 // connecting to mongoDB
 await connectToMongoDb(MONGO_URI);
@@ -19,14 +22,18 @@ const app = express();
 // parsing body with express json
 app.use(express.json());
 app.use(cookieParser());
+app.use(morgan("dev"));
 app.use(
   cors({
-    origin: "http://localhost:4200",
+    origin: ["http://localhost:4200", "http://localhost:5173"],
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
   })
 );
+
+//making uploads folder available to users as static
+app.use("/uploads", express.static("uploads"));
 
 // setting up routes with app
 import userRoutes from "./routes/userRoutes.js";

@@ -23,9 +23,7 @@ router
  * @Request : GET
  * @Route : /api/v1/products/all
  */
-router
-  .route(RouteStrings.ALL_PRODUCTS)
-  .get(isAuthorized, TryCatch(getAllProducts));
+router.route(RouteStrings.ALL_PRODUCTS).get(TryCatch(getAllProducts));
 
 /**
  * @Request : GET

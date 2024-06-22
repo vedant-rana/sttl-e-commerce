@@ -3,10 +3,11 @@ import mongoose from "mongoose";
 export const connectToMongoDb = async (connectionString) => {
   await mongoose
     .connect(connectionString, {
-      dbName: "practice",
+      tlsAllowInvalidCertificates: true,
     })
     .then((data) => {
-      console.log("DB Connected to : " + data.connection.host);
+      const data1 = data.connection
+      console.log("DB Connected to : " + data1.name);
     })
     .catch((err) => {
       console.log("Error Connecting to MongoDB : " + err.message);

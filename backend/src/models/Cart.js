@@ -21,6 +21,12 @@ const cartSchema = new Schema({
       },
     },
   ],
+  isPurchased: {
+    type: Boolean,
+    default: false,
+  }
+}, {
+  timestamps: true,
 });
 
 export const Cart = model("Cart", cartSchema);

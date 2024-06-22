@@ -3,11 +3,11 @@ import ErrorHandler from "../utils/features/customError.js";
 import { sendResponse } from "../utils/features/customResponse.js";
 
 export const createCart = async (req, res, next) => {
-  const { userId, items } = req.body;
+  const { items } = req.body;
 
   // Validate the input
-  if (!userId || !items || !Array.isArray(items) || items.length === 0) {
-    return next(new ErrorHandler("User ID and items are required", 400));
+  if (!items || !Array.isArray(items) || items.length === 0) {
+    return next(new ErrorHandler("Items are required", 400));
   }
 
   // Ensure each item has product and price
@@ -19,7 +19,9 @@ export const createCart = async (req, res, next) => {
     }
   }
 
-  const newCart = await Cart.create({ user: userId, items });
+  console.log(req.user._id)
+
+  const newCart = await Cart.create({ user: req.user._id, items });
 
   if (!newCart) {
     return next(new ErrorHandler("Cart creation failed, try again", 500));
@@ -28,4 +30,12 @@ export const createCart = async (req, res, next) => {
   return sendResponse(res, true, 201, "Cart created successfully", newCart);
 };
 
-export const getCartById = async (req, res, next) => {};
+export const getCartForUser = async (req, res, next) => {
+
+  const usersCart = await Cart.findOne({ user: req.user._id });
+
+  if (!usersCart) return next(new ErrorHandler("User doesn't have any cart", 400));
+
+  return sendResponse(res, true, 200, null, usersCart)
+
+};

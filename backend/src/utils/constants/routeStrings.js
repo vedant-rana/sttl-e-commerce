@@ -12,6 +12,7 @@ export class RouteStrings {
   static REGISTER_USER = `/register`;
   static LOGOUT_USER = `/logout`;
   static ALL_USERS = `/all`;
+  static USER_SELF = `/me`;
   static USER_DETAILS = `/:id`;
   static DELETE_USER = `/:id`;
   static UPDATE_USER = `/:id`;
@@ -23,5 +24,5 @@ export class RouteStrings {
 
   //Cart Endpoints
   static CREATE_CART = `/create`;
-  static SINGLE_CART = `/:id`;
+  static SINGLE_CART = `/`;
 }

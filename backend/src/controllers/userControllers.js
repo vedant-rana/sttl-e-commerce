@@ -50,6 +50,28 @@ export const loginUser = async (req, res, next) => {
   );
 };
 
+export const getMyDetails = async (req, res, next) => {
+  const id = req.user._id;
+
+  if (!id) return next(new ErrorHandler("Please Login First", 400));
+
+  const userData = await User.findById(id);
+  return sendResponse(res, true, 200, null, userData);
+};
+
+export const logOutUser = async (req, res, next) => {
+  return res
+    .status(200)
+    .cookie("token", null, {
+      expires: new Date(Date.now()),
+      httpOnly: true,
+    })
+    .json({
+      success: true,
+      message: "User Logged out Successfully",
+    });
+};
+
 export const getAllUsers = async (req, res, next) => {
   const allusers = await User.find();
   return sendResponse(res, true, 200, null, allusers);

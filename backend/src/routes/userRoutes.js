@@ -2,7 +2,9 @@ import express from "express";
 import {
   deleteUser,
   getAllUsers,
+  getMyDetails,
   getSingleUser,
+  logOutUser,
   loginUser,
   registerUser,
   updateUser,
@@ -27,9 +29,21 @@ router.route(RouteStrings.LOGIN_USER).post(TryCatch(loginUser));
 
 /**
  * @Request : GET
+ * @Route : /api/v1/users/me
+ */
+router.route(RouteStrings.USER_SELF).get(isAuthorized, TryCatch(getMyDetails));
+
+/**
+ * @Request : GET
  * @Route : /api/v1/users/all
  */
 router.route(RouteStrings.ALL_USERS).get(isAuthorized, TryCatch(getAllUsers));
+
+/**
+ * @Request : GET
+ * @Route : /api/v1/users/logout
+ */
+router.route(RouteStrings.LOGOUT_USER).get(isAuthorized, TryCatch(logOutUser));
 
 /**
  * @Request : GET
