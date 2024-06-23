@@ -2,3 +2,58 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* You can add global styles to this file, and also import other style files */
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+mat-card {
+  max-width: 600px;
+  margin: 5% auto;
+  padding: 20px;
+  box-shadow: 0px 0px 25px 5px rgba(0, 0, 0, 0.2),
+    0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12) !important;
+  border-radius: 1.3rem !important;
+  padding-top: 2rem;
+  border: none !important;
+  background-color: #fafafa !important;
+}
+mat-card-title {
+  text-align: center;
+  font-size: 2rem !important;
+  margin-bottom: 25px !important;
+}
+
+mat-form-field {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+button {
+  width: 100%;
+}
+mat-radio-button {
+  margin-bottom: 20px;
+}
+
+.mat-typography p {
+  margin: 1.5rem 0 0 0;
+}
+
+.link {
+  font-size: 1rem;
+  text-align: center;
+}
+
+.link > a {
+  font-weight: 500;
+  text-decoration: none;
+  color: #3f51b5;
+}
