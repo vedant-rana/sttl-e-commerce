@@ -28,7 +28,6 @@ export const getSingleProductService = async (productId) => {
       `${BACKEND_URL}/products/${productId}`,
       requestOptions
     );
-    console.log(response.data);
     return response.data.data;
   } catch (err) {
     console.log(err);

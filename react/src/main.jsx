@@ -5,13 +5,16 @@ import "./index.css";
 import { BrowserRouter as Router } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "./redux/store.js";
+import { AlertProvider } from "./components/AlertProvider.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <Provider store={store}>
+  // <React.StrictMode>
+  <Provider store={store}>
+    <AlertProvider>
       <Router>
         <App />
       </Router>
-    </Provider>
-  </React.StrictMode>
+    </AlertProvider>
+  </Provider>
+  // </React.StrictMode>
 );

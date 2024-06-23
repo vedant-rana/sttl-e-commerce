@@ -20,17 +20,15 @@ export const loginUserService = async (email, password) => {
       },
       requestOptions
     );
-    console.log(response.data);
     return response.data.data;
   } catch (err) {
-    console.log(err);
+    throw new Error(err.response.data.message);
   }
 };
 
 export const userDetailsService = async (email, password) => {
   try {
     const response = await axios.get(`${BACKEND_URL}/users/me`, requestOptions);
-    console.log(response.data);
     return response.data.data;
   } catch (err) {
     console.log(err);
@@ -38,19 +36,22 @@ export const userDetailsService = async (email, password) => {
 };
 
 export const registerUserService = async (name, email, password, phone) => {
-  const response = await axios.post(
-    `${BACKEND_URL}/users/register`,
-    {
-      name,
-      email,
-      password,
-      phone,
-    },
-    requestOptions
-  );
+  try {
+    const response = await axios.post(
+      `${BACKEND_URL}/users/register`,
+      {
+        name,
+        email,
+        password,
+        phone,
+      },
+      requestOptions
+    );
 
-  console.log(response.data);
-  return response.data.data;
+    return response.data.data;
+  } catch (err) {
+    throw new Error(err.response.data.message);
+  }
 };
 
 export const logoutUserService = async () => {

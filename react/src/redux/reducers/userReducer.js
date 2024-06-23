@@ -12,7 +12,7 @@ export const loginUser = createAsyncThunk(
     try {
       return await loginUserService(email, password);
     } catch (e) {
-      return null;
+      throw new Error(e.message);
     }
   }
 );
@@ -21,9 +21,10 @@ export const registerUser = createAsyncThunk(
   "user/registerUser",
   async ({ name, email, password, phone }) => {
     try {
-      return await registerUserService(name, email, password, phone);
+      const data = await registerUserService(name, email, password, phone);
+      return data;
     } catch (e) {
-      return null;
+      throw new Error(e.message);
     }
   }
 );

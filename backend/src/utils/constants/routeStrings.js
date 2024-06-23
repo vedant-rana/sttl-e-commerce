@@ -23,6 +23,9 @@ export class RouteStrings {
   static ALL_PRODUCTS = `/all`;
 
   //Cart Endpoints
-  static CREATE_CART = `/create`;
+  static CREATE_CART = `/sync`;
   static SINGLE_CART = `/`;
+  static MANAGE_CART = `/item`;
+  static DELETE_ITEM = `/item/:productId`;
+  static PROCESS_CART = `/process`;
 }

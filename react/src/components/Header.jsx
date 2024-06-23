@@ -1,216 +1,128 @@
 import * as React from "react";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import Menu from "@mui/material/Menu";
-import MenuIcon from "@mui/icons-material/Menu";
-import Container from "@mui/material/Container";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import Tooltip from "@mui/material/Tooltip";
-import MenuItem from "@mui/material/MenuItem";
-import AdbIcon from "@mui/icons-material/Adb";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import { logoutUser } from "../redux/reducers/userReducer";
-
-const pages = [
-  {
-    title: "Home",
-    url: "/",
-  },
-  {
-    title: "Products",
-    url: "/products",
-  },
-];
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
+import { clearCart } from "../redux/reducers/cartReducers";
+import { useAlert } from "./AlertProvider";
 
 function Header() {
   const { user } = useSelector((state) => state.userData);
 
   const dispatch = useDispatch();
-
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
-
-  const handleOpenNavMenu = (event) => {
-    setAnchorElNav(event.currentTarget);
-  };
-  const handleOpenUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget);
-  };
-
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
-  };
-
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
-  };
+  const showAlert = useAlert();
 
   const handleLogout = () => {
     dispatch(logoutUser());
+    dispatch(clearCart());
+    showAlert("Use Logged Out Successfully ", "success");
   };
 
   return (
-    <AppBar position="static">
-      <Container maxWidth="xl">
-        <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            sx={{
-              mr: 2,
-              display: { xs: "none", md: "flex" },
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
-              textDecoration: "none",
-            }}
+    <header className="flex flex-wrap sm:justify-start sm:flex-nowrap w-full bg-white text-sm py-4 dark:bg-neutral-800">
+      <nav
+        className="max-w-[85rem] w-full mx-auto px-4 flex flex-wrap basis-full items-center justify-between"
+        aria-label="Global"
+      >
+        <Link
+          className="sm:order-1 flex-none text-xl font-semibold dark:text-white"
+          to={"/"}
+        >
+          <img src="/logo.svg" className="text-white" />
+        </Link>
+        <div className="sm:order-3 flex items-center gap-x-2">
+          <button
+            type="button"
+            className="sm:hidden hs-collapse-toggle p-2.5 inline-flex justify-center items-center gap-x-2 rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-transparent dark:border-neutral-700 dark:text-white dark:hover:bg-white/10"
+            data-hs-collapse="#navbar-alignment"
+            aria-controls="navbar-alignment"
+            aria-label="Toggle navigation"
           >
-            LOGO
-          </Typography>
-
-          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpenNavMenu}
-              color="inherit"
+            <svg
+              className="hs-collapse-open:hidden flex-shrink-0 size-4"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
             >
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "left",
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{
-                display: { xs: "block", md: "none" },
-              }}
+              <line x1="3" x2="21" y1="6" y2="6" />
+              <line x1="3" x2="21" y1="12" y2="12" />
+              <line x1="3" x2="21" y1="18" y2="18" />
+            </svg>
+            <svg
+              className="hs-collapse-open:block hidden flex-shrink-0 size-4"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
             >
-              {pages.map((page) => (
-                <MenuItem key={page.title} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">
-                    <Link to={page.url}>{page.title}</Link>
-                  </Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
-          <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
-          <Typography
-            variant="h5"
-            noWrap
-            component="a"
-            href="#app-bar-with-responsive-menu"
-            sx={{
-              mr: 2,
-              display: { xs: "flex", md: "none" },
-              flexGrow: 1,
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
-              textDecoration: "none",
-            }}
-          >
-            LOGO
-          </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {pages.map((page) => (
-              <Button
-                key={page.title}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: "white", display: "block" }}
-              >
-                <Link to={page.url}>{page.title}</Link>
-              </Button>
-            ))}
-          </Box>
-          <Box sx={{ flexGrow: 0 }}>
-            <Button
-              onClick={handleCloseNavMenu}
-              sx={{ my: 2, color: "white", display: "block" }}
+              <path d="M18 6 6 18" />
+              <path d="m6 6 12 12" />
+            </svg>
+          </button>
+          {user !== null ? (
+            <button
+              type="button"
+              className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800"
+              onClick={handleLogout}
+            >
+              <ExitToAppIcon />
+            </button>
+          ) : (
+            <button
+              type="button"
+              className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800"
+            >
+              <Link to={"/login"}>
+                <AccountCircleIcon />
+              </Link>
+            </button>
+          )}
+        </div>
+        <div
+          id="navbar-alignment"
+          className="hs-collapse hidden overflow-hidden transition-all duration-300 basis-full grow sm:grow-0 sm:basis-auto sm:block sm:order-2"
+        >
+          <div className="flex flex-col gap-5 mt-5 sm:flex-row sm:items-center sm:mt-0 sm:ps-5">
+            <Link
+              className="font-medium text-gray-600 hover:text-gray-400 dark:text-neutral-400 dark:hover:text-neutral-500"
+              to={"/"}
+            >
+              Home
+            </Link>
+            <Link
+              className="font-medium text-gray-600 hover:text-gray-400 dark:text-neutral-400 dark:hover:text-neutral-500"
+              to={"/products"}
+            >
+              Products
+            </Link>
+            <Link
+              className="font-medium text-gray-600 hover:text-gray-400 dark:text-neutral-400 dark:hover:text-neutral-500"
+              to={"/contact"}
+            >
+              Contact
+            </Link>
+            <Link
+              className="font-medium text-gray-600 hover:text-gray-400 dark:text-neutral-400 dark:hover:text-neutral-500"
+              to={"/cart"}
             >
               Cart
-            </Button>
-          </Box>
-          {user ? (
-            <>
-              <Box sx={{ flexGrow: 0 }}>
-                <Tooltip title="Logout">
-                  <IconButton sx={{ p: 0 }} onClick={handleLogout}>
-                    <ExitToAppIcon />
-                  </IconButton>
-                </Tooltip>
-              </Box>
-            </>
-          ) : (
-            <>
-              <Box sx={{ flexGrow: 0 }}>
-                <Tooltip title="Login">
-                  <IconButton sx={{ p: 0 }}>
-                    <Link to="/login">
-                      <AccountCircleIcon />
-                    </Link>
-                  </IconButton>
-                </Tooltip>
-              </Box>
-            </>
-          )}
-        </Toolbar>
-      </Container>
-    </AppBar>
+            </Link>
+          </div>
+        </div>
+      </nav>
+    </header>
   );
 }
 export default Header;
-
-// <Box sx={{ flexGrow: 0 }}>
-//   <Tooltip title="Open settings">
-//     <IconButton sx={{ p: 0 }}>
-//       <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-//     </IconButton>
-//   </Tooltip>
-//   <Menu
-//     sx={{ mt: "45px" }}
-//     id="menu-appbar"
-//     anchorEl={anchorElUser}
-//     anchorOrigin={{
-//       vertical: "top",
-//       horizontal: "right",
-//     }}
-//     keepMounted
-//     transformOrigin={{
-//       vertical: "top",
-//       horizontal: "right",
-//     }}
-//     open={Boolean(anchorElUser)}
-//     onClose={handleCloseUserMenu}
-//   >
-//     {settings.map((setting) => (
-//       <MenuItem key={setting} onClick={handleCloseUserMenu}>
-//         <Typography textAlign="center">{setting}</Typography>
-//       </MenuItem>
-//     ))}
-//   </Menu>
-// </Box>;

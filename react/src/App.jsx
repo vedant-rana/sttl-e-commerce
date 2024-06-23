@@ -10,22 +10,31 @@ import Products from "./pages/Products";
 import Signup from "./pages/Signup";
 import { userExist } from "./redux/reducers/userReducer";
 import ProtectedRoute from "./components/ProtectedRoute";
+import useSyncCart from "./hooks/SyncCart";
+import { setCartItems } from "./redux/reducers/cartReducers";
+import ProductDetails from "./pages/ProductDetails";
+import CheckOut from "./pages/CheckOut";
+import Payment from "./pages/Payment";
+import Contact from "./pages/Contact";
 
 function App() {
   const dispatch = useDispatch();
   const { user, loading, error } = useSelector((state) => state.userData);
-
   useEffect(() => {
     dispatch(userExist());
-  }, []);
+  }, [dispatch]);
+
+  // useSyncCart(user);
+
   return (
     <>
       <Header />
-      {/* <h1 className="text-3xl font-bold underline text-red-500 text-center">Hello world!</h1> */}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/products" element={<Products />} />
+        <Route path="/contact" element={<Contact />} />
         <Route path="/cart" element={<Cart />} />
+        <Route path="/products/:id" element={<ProductDetails />} />
 
         <Route
           path="/login"
@@ -40,6 +49,28 @@ function App() {
           element={
             <ProtectedRoute isAuthenticated={user ? false : true}>
               <Signup />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/checkout"
+          element={
+            <ProtectedRoute
+              isAuthenticated={user ? true : false}
+              redirect="/login"
+            >
+              <CheckOut />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/payment"
+          element={
+            <ProtectedRoute
+              isAuthenticated={user ? true : false}
+              redirect="/login"
+            >
+              <Payment />
             </ProtectedRoute>
           }
         />
