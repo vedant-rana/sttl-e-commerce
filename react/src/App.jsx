@@ -16,6 +16,7 @@ import ProductDetails from "./pages/ProductDetails";
 import CheckOut from "./pages/CheckOut";
 import Payment from "./pages/Payment";
 import Contact from "./pages/Contact";
+import NotFound from "./pages/NotFound";
 
 function App() {
   const dispatch = useDispatch();
@@ -74,6 +75,7 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </>
   );

@@ -10,7 +10,6 @@ const Cart = () => {
   const { cartItems } = useSelector((state) => state.cartData);
   const { user } = useSelector((state) => state.userData);
   const dispatch = useDispatch();
-  console.log(cartItems);
 
   const totalPrice = () => {
     return cartItems.reduce(
@@ -23,6 +22,7 @@ const Cart = () => {
     // dispatch(setCartFromLocalStorage());
     const syncCart = async () => {
       if (user) {
+        console.log(cartItems);
         const response = await syncCartData(cartItems);
         console.log(response.data.items);
         dispatch(setCartItems(response.data.items));

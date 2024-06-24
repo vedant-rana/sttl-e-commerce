@@ -1,13 +1,16 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useAlert } from "../components/AlertProvider";
 import { processCartToOrder } from "../services/cartServices";
+import { StringConstants } from "../utils/stringConstants";
+import { clearCart } from "../redux/reducers/cartReducers";
 
 const Payment = () => {
   const { cartItems } = useSelector((state) => state.cartData);
   const navigate = useNavigate();
   const showAlert = useAlert();
+  const dispatch = useDispatch();
 
   const [paymentData, setPaymentData] = useState({
     name: "",
@@ -58,6 +61,7 @@ const Payment = () => {
       .then((data) => {
         if (data) {
           showAlert("order placed successfully", "success");
+          dispatch(clearCart());
           navigate("/");
         }
       })

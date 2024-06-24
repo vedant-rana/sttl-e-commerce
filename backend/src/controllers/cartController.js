@@ -117,7 +117,7 @@ export const manageQuantity = async (req, res, next) => {
 export const convertCartToOrder = async (req, res, next) => {
   const userId = req.user._id;
 
-  const order = await Cart.findOne({ user: userId });
+  const order = await Cart.findOne({ user: userId, isPurchased: false });
   order.isPurchased = true;
 
   order.save();

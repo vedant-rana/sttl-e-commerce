@@ -23,7 +23,6 @@ const CheckOut = () => {
   };
 
   const makePayment = () => {
-    console.log(checkOutData);
     if (
       !checkOutData.fname ||
       !checkOutData.lname ||

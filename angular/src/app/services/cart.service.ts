@@ -36,4 +36,27 @@ export class CartService {
       this.setLocalStorage(this.cartItems);
     }
   }
+
+  updateItemQuantity(productId: string, quantity: number) {
+    const item = this.cartItems.find(
+      (item: ICartItem) => item.productId === productId
+    );
+
+    if (item) {
+      item.quantity = quantity;
+      this.setLocalStorage(this.cartItems);
+    }
+  }
+
+  removeItemFromCart(productId: string) {
+    this.cartItems = this.cartItems.filter(
+      (item: ICartItem) => item.productId !== productId
+    );
+    this.setLocalStorage(this.cartItems);
+  }
+
+  clearCart() {
+    this.cartItems = [];
+    this.setLocalStorage(this.cartItems);
+  }
 }
