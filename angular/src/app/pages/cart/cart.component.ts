@@ -3,6 +3,7 @@ import { RouterLink } from '@angular/router';
 import { CartRowComponent } from '../../components/cart-row/cart-row.component';
 import { CartService } from '../../services/cart.service';
 import { ICartItem } from '../../types/cartTypes';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-cart',
@@ -12,8 +13,15 @@ import { ICartItem } from '../../types/cartTypes';
   styleUrl: './cart.component.css',
 })
 export class CartComponent {
-  cartItems: ICartItem[] = this.cartService.cartItems;
-  constructor(private cartService: CartService) {}
+  cartItems: ICartItem[] = [];
+  constructor(
+    private cartService: CartService,
+    private userService: UserService
+  ) {}
+
+  ngOnInit() {
+    this.cartItems = this.cartService.getLocalStorage();
+  }
 
   totalPrice() {
     return this.cartItems.reduce(

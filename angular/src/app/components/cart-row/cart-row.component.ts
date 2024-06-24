@@ -25,7 +25,6 @@ export class CartRowComponent {
 
   ngOnInit() {
     this.quant = this.cartItem?.quantity!;
-    console.log(this.cartItem);
   }
 
   handleIncrement() {

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { NgToastService } from 'ng-angular-popup';
+import { CartService } from '../../services/cart.service';
 
 @Component({
   selector: 'app-header',
@@ -13,6 +14,7 @@ import { NgToastService } from 'ng-angular-popup';
 export class HeaderComponent {
   constructor(
     private userService: UserService,
+    private cartService: CartService,
     private router: Router,
     private toaster: NgToastService
   ) {}
@@ -39,6 +41,9 @@ export class HeaderComponent {
         this.router.navigate(['/login']);
         // emitting the user login status as false
         this.userService.userLoggedIn.emit(false);
+
+        //clearing the cart local Storage
+        this.cartService.clearCart();
 
         //toaster to give success message to user
         this.toaster.success({

@@ -14,6 +14,8 @@ import { sendResponse } from "../utils/features/customResponse.js";
 export const syncCart = async (req, res, next) => {
   const { items } = req.body;
 
+  console.log(items);
+
   let cartData;
 
   // Check whether the user already has a cart with isPurchased value false

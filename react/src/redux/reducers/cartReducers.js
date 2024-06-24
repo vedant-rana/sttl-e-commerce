@@ -15,7 +15,7 @@ const cartSlice = createSlice({
       const { productId, quantity } = action.payload;
 
       const item = state.cartItems.find((item) => item.productId === productId);
-
+      console.log(item);
       if (item) {
         if (item.quantity > 9) {
           return;

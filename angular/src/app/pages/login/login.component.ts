@@ -9,6 +9,7 @@ import { Router, RouterLink } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { loginUserType } from '../../types/userTypes';
 import { NgToastService } from 'ng-angular-popup';
+import { CartService } from '../../services/cart.service';
 
 @Component({
   selector: 'app-login',
@@ -34,6 +35,7 @@ export class LoginComponent {
   constructor(
     private fb: FormBuilder,
     private userService: UserService,
+    private cartService: CartService,
     private router: Router,
     private toaster: NgToastService
   ) {}
@@ -72,7 +74,9 @@ export class LoginComponent {
           // console.log(data);
           this.router.navigate(['/']); // naviagting to home page
           this.userService.userLoggedIn.emit(true);
-          // this.commonService.userLoggedIn.emit(true);
+
+          // adding all the local storage cart data to Logged in user's DB
+          this.cartService.syncCartWithBackend();
 
           //toaster to give success message to user
           this.toaster.success({
