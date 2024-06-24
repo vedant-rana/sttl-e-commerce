@@ -8,6 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { Router, RouterLink } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { loginUserType } from '../../types/userTypes';
+import { NgToastService } from 'ng-angular-popup';
 
 @Component({
   selector: 'app-login',
@@ -33,7 +34,8 @@ export class LoginComponent {
   constructor(
     private fb: FormBuilder,
     private userService: UserService,
-    private router: Router
+    private router: Router,
+    private toaster: NgToastService
   ) {}
 
   // userLogin form Group for HTML form handle
@@ -67,24 +69,25 @@ export class LoginComponent {
       //registering user by sending data to user Service
       this.userService.loginUser(loginUserData).subscribe({
         next: (data) => {
-          console.log(data);
+          // console.log(data);
           this.router.navigate(['/']); // naviagting to home page
+          this.userService.userLoggedIn.emit(true);
           // this.commonService.userLoggedIn.emit(true);
 
           //toaster to give success message to user
-          // this.toaster.success({
-          //   detail: 'SUCCESS',
-          //   summary: 'User logged in successfully',
-          //   duration: 3000,
-          // });
+          this.toaster.success({
+            detail: 'SUCCESS',
+            summary: 'User logged in successfully',
+            duration: 3000,
+          });
         },
         error: (err) => {
           // toaster to give error message to user if any error occurs
-          // this.toaster.error({
-          //   detail: 'ERROR',
-          //   summary: err.error.message,
-          //   duration: 3000,
-          // });
+          this.toaster.error({
+            detail: 'ERROR',
+            summary: err.error.message,
+            duration: 3000,
+          });
           console.log(err);
         },
       });

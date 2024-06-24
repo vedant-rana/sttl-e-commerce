@@ -15,6 +15,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule, MatCardTitle } from '@angular/material/card';
 import { MatSelectModule } from '@angular/material/select';
 import { MatRadioModule } from '@angular/material/radio';
+import { NgToastService } from 'ng-angular-popup';
 
 @Component({
   selector: 'app-register',
@@ -35,7 +36,12 @@ import { MatRadioModule } from '@angular/material/radio';
   styleUrl: './register.component.css',
 })
 export class RegisterComponent {
-  constructor(private userService: UserService, private router: Router) {}
+  toaster = inject(NgToastService);
+  constructor(
+    private userService: UserService,
+    private router: Router
+  ) // private toaster: NgToastService
+  {}
 
   // injecting the FormBuilder to create form group
   formBuilder = inject(FormBuilder);
@@ -127,23 +133,24 @@ export class RegisterComponent {
         next: (data) => {
           console.log(data);
           this.router.navigate(['/']); // naviagting to home page
+          this.userService.userLoggedIn.emit(true);
           // this.commonService.userLoggedIn.emit(true); // emitting userLoggedIn value true to modify header links
 
           // //toaster to give success message to user
-          // this.toaster.success({
-          //   detail: 'SUCCESS',
-          //   summary: 'User Registered successfully',
-          //   duration: 3000,
-          // });
+          this.toaster.success({
+            detail: 'SUCCESS',
+            summary: 'User Registered successfully',
+            duration: 3000,
+          });
         },
         error: (err) => {
           console.log(err);
           // toaster to give error message to user if any error occurs
-          // this.toaster.error({
-          //   detail: 'ERROR',
-          //   summary: err.error.message,
-          //   duration: 3000,
-          // });
+          this.toaster.error({
+            detail: 'ERROR',
+            summary: err.error.message,
+            duration: 3000,
+          });
         },
       });
     } else {

@@ -1,14 +1,36 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { ServerConstants } from '../utils/serverConstants';
 import { loginUserType, regiterUserType } from '../types/userTypes';
+import { CookieService } from 'ngx-cookie-service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
-  constructor(private http: HttpClient, private router: Router) {}
+  userLoggedIn = new EventEmitter<boolean>();
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private cookieService: CookieService
+  ) {}
+
+  /**
+   * @purpose to check and emit the value if cookie named 'token' is present
+   * @param none
+   * @returns boolean
+   *
+   */
+  isThereCookie() {
+    if (this.cookieService.get('token')) {
+      this.userLoggedIn.emit(true);
+      return true;
+    } else {
+      this.userLoggedIn.emit(false);
+      return false;
+    }
+  }
 
   /**
    * @purpose to register user with data through HttpClient's POST requrest to API server
