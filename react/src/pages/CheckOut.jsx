@@ -34,8 +34,8 @@ const CheckOut = () => {
       !checkOutData.zip
     ) {
       showAlert("Please enter all the Fields ", "error");
-      navigate("/payment");
     } else {
+      navigate("/payment");
     }
   };
   const cancelPayment = () => {

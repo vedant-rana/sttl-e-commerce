@@ -5,11 +5,14 @@ import { imageServer } from "../utils/envVariables";
 import { addToCart } from "../redux/reducers/cartReducers";
 import { useDispatch } from "react-redux";
 import { useAlert } from "../components/AlertProvider";
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
 
 const ProductDetails = () => {
   const { id } = useParams();
 
   const [product, setProduct] = useState(null);
+  const [quantity, setQuantity] = useState(1);
   const dispatch = useDispatch();
   const showAlert = useAlert();
 
@@ -19,13 +22,25 @@ const ProductDetails = () => {
     });
   }, [id]);
 
+  const handleIncrement = () => {
+    if (quantity < 10) {
+      setQuantity(quantity + 1);
+    }
+  };
+
+  const handleDecrement = () => {
+    if (quantity > 1) {
+      setQuantity(quantity - 1);
+    }
+  };
+
   const addProductToCart = () => {
     const data = {
       productId: product._id,
       name: product.name,
       image: product.image,
       price: product.price,
-      quantity: 1,
+      quantity: quantity,
     };
     dispatch(addToCart(data));
     showAlert("Product added to cart", "success");
@@ -141,6 +156,28 @@ const ProductDetails = () => {
                     className="w-10 h-10 bg-blue-400 border-2 border-white hover:border-gray-800 rounded-full shrink-0 transition-all"
                   ></button>
                 </div>
+              </div>
+
+              <div className="flex mt-6 sm:items-center sm:justify-start w-full">
+                <button
+                  className="group py-2 px-4 border border-gray-400 rounded-l-full bg-white transition-all duration-300 hover:bg-gray-50 hover:shadow-sm hover:shadow-gray-300"
+                  onClick={handleDecrement}
+                >
+                  <RemoveIcon />
+                </button>
+                <input
+                  type="text"
+                  className="font-semibold text-gray-900 cursor-pointer text-lg py-[7px] px-4 w-full sm:max-w-[70px] outline-0 border-y border-gray-400 bg-transparent placeholder:text-gray-900 text-center hover:bg-gray-50"
+                  placeholder="1"
+                  value={quantity}
+                  readOnly
+                />
+                <button
+                  className="group py-2 px-4 border border-gray-400 rounded-r-full bg-white transition-all duration-300 hover:bg-gray-50 hover:shadow-sm hover:shadow-gray-300"
+                  onClick={handleIncrement}
+                >
+                  <AddIcon />
+                </button>
               </div>
 
               <div className="flex flex-wrap gap-4 mt-8">

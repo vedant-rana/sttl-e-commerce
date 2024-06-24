@@ -1,3 +1,9 @@
+/**
+ * @purpose to add cookie in the clients browser
+ *
+ * @param res response object
+ * @param user user object to generate token using his _id
+ */
 export const setCookieWithToken = (res, user) => {
   const options = {
     expires: new Date(
