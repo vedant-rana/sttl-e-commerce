@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getAllProductsServices } from "../../services/productServices";
 
+// creating action to get all products
 export const getAllProducts = createAsyncThunk(
   "products/allProducts",
   async () => {
@@ -12,12 +13,14 @@ export const getAllProducts = createAsyncThunk(
   }
 );
 
+// inital state of products
 const initialState = {
   products: [],
   loading: false,
   error: null,
 };
 
+// products slice
 const productSlice = createSlice({
   name: "products",
   initialState,

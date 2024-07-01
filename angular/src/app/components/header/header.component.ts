@@ -3,11 +3,13 @@ import { Router, RouterLink } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { NgToastService } from 'ng-angular-popup';
 import { CartService } from '../../services/cart.service';
+import { ICartItem } from '../../types/cartTypes';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, MatIconModule],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
 })
@@ -21,11 +23,18 @@ export class HeaderComponent {
   // variable to store the users login status
   isLoggedIn: boolean = false;
 
+  // cart items count
+  cartItemsCount: number = 0;
+
   ngOnInit(): void {
     //setting the value as user login staus
     this.isLoggedIn = this.userService.isThereCookie();
     this.userService.userLoggedIn.subscribe((result) => {
       this.isLoggedIn = result;
+    });
+    this.cartItemsCount = this.cartService.cartItems.length;
+    this.cartService.isCartItemsChanges.subscribe((data: ICartItem[]) => {
+      this.cartItemsCount = data?.length;
     });
   }
 

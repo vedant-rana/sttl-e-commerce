@@ -3,6 +3,9 @@ import { ServerConstants } from '../../utils/serverConstants';
 import { IProduct } from '../../types/productTypes';
 import { ActivatedRoute } from '@angular/router';
 import { ProductService } from '../../services/product.service';
+import { ICartItem } from '../../types/cartTypes';
+import { CartService } from '../../services/cart.service';
+import { NgToastService } from 'ng-angular-popup';
 
 @Component({
   selector: 'app-product-details',
@@ -17,13 +20,24 @@ export class ProductDetailsComponent {
 
   constructor(
     private route: ActivatedRoute,
-    private productService: ProductService
+    private cartService: CartService,
+    private productService: ProductService,
+    private toaster: NgToastService
   ) {}
 
   ngOnInit() {
     let productId = this.route.snapshot.paramMap.get('id');
     this.productService.getSingleProduct(productId!).subscribe((res: any) => {
       this.product = res.data;
+    });
+  }
+
+  addProductTocart(cartItem: ICartItem) {
+    this.cartService.addToCart(cartItem);
+    this.toaster.success({
+      detail: 'SUCCESS',
+      summary: 'Product Added to cart',
+      duration: 3000,
     });
   }
 }

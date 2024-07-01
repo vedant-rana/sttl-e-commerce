@@ -1,15 +1,15 @@
 <header
-  class="flex flex-wrap sm:justify-start sm:flex-nowrap w-full bg-white text-sm py-4 dark:bg-neutral-800"
+  class="flex flex-wrap sm:justify-start sm:flex-nowrap w-full bg-black text-sm py-5"
 >
   <nav
     class="max-w-[85rem] w-full mx-auto px-4 flex flex-wrap basis-full items-center justify-between"
     aria-label="Global"
   >
     <a
-      class="sm:order-1 flex-none text-xl font-semibold dark:text-white"
+      class="sm:order-1 flex-none text-[2xl] font-semibold text-white"
       routerLink="/"
     >
-      <img src="../../../assets/logo.svg" class="text-white" />
+      <img src="../../../assets/logo.svg" class="text-white h-[1.5rem]" />
     </a>
     <div class="sm:order-3 flex items-center gap-x-2">
       <button
@@ -54,18 +54,26 @@
       @if(isLoggedIn){
       <button
         type="button"
-        class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800"
+        class="text-[1rem] py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800"
         (click)="logOutUser()"
       >
         logout
       </button>
       }@else {
-      <button
-        type="button"
-        class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800"
+      <a
+        routerLink="/login"
+        class="text-[1rem] py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800"
       >
-        <a routerLink="/login"> login </a>
-      </button>
+        login
+      </a>
+
+      <a
+        routerLink="/register"
+        class="text-[1rem] py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800"
+      >
+        Signup
+      </a>
+
       }
     </div>
     <div
@@ -76,28 +84,34 @@
         class="flex flex-col gap-5 mt-5 sm:flex-row sm:items-center sm:mt-0 sm:ps-5"
       >
         <a
-          class="font-medium text-gray-600 hover:text-gray-400 dark:text-neutral-400 dark:hover:text-neutral-500"
+          class="font-medium text-xl text-gray-400 hover:text-gray-200"
           routerLink="/"
         >
           Home
         </a>
         <a
-          class="font-medium text-gray-600 hover:text-gray-400 dark:text-neutral-400 dark:hover:text-neutral-500"
+          class="font-medium text-xl text-gray-400 hover:text-gray-200"
           routerLink="/products"
         >
           Products
         </a>
         <a
-          class="font-medium text-gray-600 hover:text-gray-400 dark:text-neutral-400 dark:hover:text-neutral-500"
+          class="font-medium text-xl text-gray-400 hover:text-gray-200"
           routerLink="/contact"
         >
           Contact
         </a>
         <a
-          class="font-medium text-gray-600 hover:text-gray-400 dark:text-neutral-400 dark:hover:text-neutral-500"
+          class="font-medium text-xl text-gray-400 hover:text-gray-200 relative pr-3 py-2 z-4"
           routerLink="/cart"
         >
-          Cart
+          Cart @if(cartItemsCount > 0){
+          <span
+            class="absolute top-1 right-0 text-[0.9rem] leading-[8px] z-2 bg-gray-300 text-gray-800 p-[0.3rem] rounded-full"
+          >
+            {{ cartItemsCount }}
+          </span>
+          }
         </a>
       </div>
     </div>

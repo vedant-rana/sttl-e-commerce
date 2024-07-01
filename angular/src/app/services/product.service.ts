@@ -7,7 +7,7 @@ import { ServerConstants } from '../utils/serverConstants';
   providedIn: 'root',
 })
 export class ProductService {
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient) {}
 
   getAllProducts() {
     return this.http.get(`${ServerConstants.SERVER_URL}/products/all`);

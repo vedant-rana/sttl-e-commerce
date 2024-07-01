@@ -1,6 +1,6 @@
 @if(cartItem !== undefined){
 <div
-  class="grid grid-cols-1 lg:grid-cols-2 min-[550px]:gap-6 border-t border-gray-200 py-6"
+  class="grid grid-cols-1 min-h-[180px] lg:grid-cols-2 min-[550px]:gap-6 border-t border-gray-300 py-6"
 >
   <div
     class="flex items-center flex-col min-[550px]:flex-row gap-3 min-[550px]:gap-6 w-full max-xl:justify-center max-xl:max-w-xl max-xl:mx-auto"
@@ -9,22 +9,23 @@
       <img
         [src]="[imageServer + cartItem.image]"
         alt="perfume bottle image"
-        class="xl:w-[140px]"
+        class="xl:w-[110px]"
       />
     </div>
     <div class="pro-data w-full max-w-sm">
-      <h5
-        class="font-semibold text-xl leading-8 text-black max-[550px]:text-center"
-      >
-        <a [routerLink]="['/products', cartItem.productId]">{{
-          cartItem.name
-        }}</a>
+      <h5 class="font-semibold leading-8 text-black max-[550px]:text-center">
+        <a
+          [routerLink]="['/products', cartItem.productId]"
+          class="text-xl font-normal"
+          >{{ cartItem.name }}</a
+        >
       </h5>
       <p
         class="font-normal text-lg leading-8 text-gray-500 my-2 min-[550px]:my-3 max-[550px]:text-center"
       ></p>
       <h6
-        class="font-medium text-lg leading-8 text-indigo-600 max-[550px]:text-center"
+        class="font-medium leading-8 text-blue-700 max-[550px]:text-center"
+        style="font-size: 1.1rem"
       >
         ₹ {{ cartItem.price }}
       </h6>
@@ -35,7 +36,7 @@
   >
     <div class="flex items-center w-full mx-auto justify-center">
       <button
-        class="group rounded-l-full px-6 py-[18px] border border-gray-200 flex items-center justify-center shadow-sm shadow-transparent transition-all duration-500 hover:shadow-gray-200 hover:border-gray-300 hover:bg-gray-50"
+        class="group rounded-l-full px-4 py-[8px] border border-gray-400 flex items-center justify-center shadow-sm shadow-transparent transition-all duration-500 hover:shadow-gray-200 hover:border-gray-300 hover:bg-gray-50"
         (click)="handleDecrement()"
       >
         <svg
@@ -69,12 +70,12 @@
         </svg>
       </button>
       <span
-        class="border-y border-gray-200 outline-none text-gray-900 font-semibold text-lg w-full max-w-[118px] min-w-[80px] placeholder:text-gray-900 py-[15px] text-center bg-transparent"
+        class="border-y border-gray-400 outline-none text-gray-900 font-semibold text-lg w-full max-w-[50px] min-w-[60px] placeholder:text-gray-900 py-[5px] text-center bg-transparent"
       >
         {{ quant }}
       </span>
       <button
-        class="group rounded-r-full px-6 py-[18px] border border-gray-200 flex items-center justify-center shadow-sm shadow-transparent transition-all duration-500 hover:shadow-gray-200 hover:border-gray-300 hover:bg-gray-50"
+        class="group rounded-r-full px-4 py-[8px] border border-gray-400 flex items-center justify-center shadow-sm shadow-transparent transition-all duration-500 hover:shadow-gray-200 hover:border-gray-300 hover:bg-gray-50"
         (click)="handleIncrement()"
       >
         <svg
@@ -108,14 +109,15 @@
         </svg>
       </button>
       <button
-        class="group ml-4 px-6 py-[18px] border border-red-200 text-red-600 flex items-center justify-center shadow-sm shadow-transparent transition-all duration-500 rounded-full hover:shadow-red-200 hover:border-red-300 hover:bg-red-50"
+        class="group ml-4 px-5 py-[8px] border border-red-200 text-red-400 flex items-center justify-center shadow-sm shadow-transparent transition-all duration-500 rounded-full hover:shadow-red-200 hover:border-red-300 hover:bg-red-50"
         (click)="removeFromCart()"
       >
         <mat-icon fontIcon="delete"></mat-icon>
       </button>
     </div>
     <h6
-      class="text-indigo-600 font-manrope font-bold text-2xl leading-9 w-full max-w-[176px] text-center"
+      class="text-blue-700 font-manrope font-bold text-2xl leading-9 w-full max-w-[176px] text-center"
+      style="font-size: 1.3rem; font-weight: 500"
     >
       ₹ {{ cartItem.price! * quant! }}
     </h6>

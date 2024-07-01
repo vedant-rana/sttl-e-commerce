@@ -72,7 +72,7 @@
             </div>
             <div>
               <input
-                type="text"
+                type="number"
                 placeholder="Zip Code"
                 formControlName="zip"
                 class="px-4 py-3 bg-gray-100 focus:bg-transparent text-gray-800 w-full text-sm rounded-md focus:outline-blue-600"
@@ -86,10 +86,9 @@
             <div class="relative">
               <select
                 class="block appearance-none w-full bg-gray-100 border border-gray-300 text-gray-800 py-3 px-4 pr-8 rounded-md focus:bg-transparent focus:border-gray-500 focus:outline-none"
-                aria-label="Select Version"
-                aria-placeholder="Select"
+                formControlName="payment"
               >
-                <option selected>Select Payment Method</option>
+                <option value="">Select Payment Method</option>
                 <option value="cheque">Cheque</option>
                 <option value="cod">Cash On Delivery</option>
               </select>

@@ -1,2 +1,6 @@
-<app-header></app-header> <router-outlet></router-outlet>
 <ng-toast [style]="{ width: '300px' }"></ng-toast>
+<div class="w-full h-screen flex flex-col">
+  <app-header></app-header>
+  <router-outlet class="flex-1"></router-outlet>
+  <app-footer></app-footer>
+</div>

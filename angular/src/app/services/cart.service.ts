@@ -9,10 +9,12 @@ import { UserService } from './user.service';
 })
 export class CartService {
   cartItems: ICartItem[] = this.getLocalStorage() || [];
+  isCartItemsChanges = new EventEmitter();
+
   constructor(private http: HttpClient, private userService: UserService) {}
 
   getLocalStorage(): ICartItem[] {
-    return JSON.parse(localStorage.getItem('cart') as string);
+    return JSON.parse((localStorage.getItem('cart') as string) || '[]');
   }
 
   setLocalStorage(items: ICartItem[]) {
@@ -23,9 +25,7 @@ export class CartService {
 
   addToCart(cartItem: ICartItem) {
     if (this.userService.isThereCookie()) {
-      console.log(this.getLocalStorage());
       this.syncCartWithBackend(cartItem);
-      console.log(this.getLocalStorage());
     } else {
       const { productId, quantity } = cartItem;
 
@@ -44,6 +44,7 @@ export class CartService {
         this.setLocalStorage(this.cartItems);
       }
     }
+    this.isCartItemsChanges.emit(this.cartItems);
   }
 
   updateItemQuantity(productId: string, quantity: number) {
@@ -75,12 +76,15 @@ export class CartService {
   removeItemFromCart(productId: string) {
     if (this.userService.isThereCookie()) {
       this.removeCartItemInDB(productId).subscribe({
-        next: (data) => {
-          if (data) {
-            this.cartItems = this.cartItems.filter(
-              (item: ICartItem) => item.productId !== productId
-            );
-            this.setLocalStorage(this.cartItems);
+        next: (data: any) => {
+          if (data.body) {
+            // console.log(productId);
+            // this.cartItems = this.cartItems.filter(
+            //   (item: ICartItem) => item.productId !== productId
+            // );
+            // console.log(this.cartItems);
+            this.setLocalStorage(data.body.data.items);
+            this.isCartItemsChanges.emit(data.body.data.items);
           }
         },
         error: (err) => {
@@ -92,12 +96,49 @@ export class CartService {
         (item: ICartItem) => item.productId !== productId
       );
       this.setLocalStorage(this.cartItems);
+      this.isCartItemsChanges.emit(this.cartItems);
     }
   }
+
+  // removeItemFromCart(productId: string) {
+  //   if (this.userService.isThereCookie()) {
+  //     this.removeCartItemInDB(productId).subscribe({
+  //       next: (data: any) => {
+  //         if (data) {
+  //           console.log('Data from DB:', data.body);
+  //           this.cartItems = this.cartItems.filter((item: ICartItem) => {
+  //             console.log('productid : ' + item.productId);
+  //             if (item.productId === productId) {
+  //               console.log('same product to remove : ' + item);
+  //               return false;
+  //             }
+  //             return true;
+  //           });
+  //           console.log('Filtered cartItems:', this.cartItems);
+  //           this.setLocalStorage(this.cartItems);
+  //           console.log('Updated Local Storage:', this.getLocalStorage());
+  //           this.isCartItemsChanges.emit(this.cartItems);
+  //         }
+  //       },
+  //       error: (err) => {
+  //         console.log('Error:', err);
+  //       },
+  //     });
+  //   } else {
+  //     this.cartItems = this.cartItems.filter(
+  //       (item: ICartItem) => item.productId !== productId
+  //     );
+  //     console.log('Filtered cartItems:', this.cartItems);
+  //     this.setLocalStorage(this.cartItems);
+  //     console.log('Updated Local Storage:', this.getLocalStorage());
+  //     this.isCartItemsChanges.emit(this.cartItems);
+  //   }
+  // }
 
   clearCart() {
     this.cartItems = [];
     this.setLocalStorage(this.cartItems);
+    this.isCartItemsChanges.emit(this.cartItems);
   }
 
   syncCartWithBackend(cartItem?: ICartItem) {
@@ -119,7 +160,9 @@ export class CartService {
       )
       .subscribe({
         next: (res: any) => {
-          this.setLocalStorage(res.body.data.items);
+          const resData = res.body.data.items;
+          this.setLocalStorage(resData);
+          this.isCartItemsChanges.emit(resData);
         },
         error: (err) => {
           console.log(err);
@@ -154,5 +197,15 @@ export class CartService {
         withCredentials: true,
       }
     );
+  }
+
+  processCartToOrder() {
+    return this.http.get(`${ServerConstants.SERVER_URL}/cart/process`, {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+      }),
+      observe: 'response',
+      withCredentials: true,
+    });
   }
 }

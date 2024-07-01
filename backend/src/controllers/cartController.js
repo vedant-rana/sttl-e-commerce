@@ -115,7 +115,7 @@ export const deleteItemFromCart = async (req, res, next) => {
 
   cartData = await isCartExist.save();
 
-  return sendResponse(res, true, 200, "item removed successfully");
+  return sendResponse(res, true, 200, "item removed successfully", cartData);
 };
 
 /**

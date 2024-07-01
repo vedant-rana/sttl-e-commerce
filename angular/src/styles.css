@@ -11,6 +11,7 @@ body {
 }
 body {
   margin: 0;
+  scroll-behavior: smooth;
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
@@ -36,7 +37,7 @@ mat-form-field {
   margin-bottom: 10px;
 }
 
-button {
+.user-btn {
   width: 100%;
 }
 mat-radio-button {

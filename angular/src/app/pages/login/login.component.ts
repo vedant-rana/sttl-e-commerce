@@ -43,10 +43,10 @@ export class LoginComponent {
   // userLogin form Group for HTML form handle
   userLogin = this.fb.group({
     // email : required, should be a valid email address
-    email: ['ang1@gmail.com', [Validators.required, Validators.email]],
+    email: ['', [Validators.required, Validators.email]],
 
     // password : required, should be atleast 6 characters long
-    password: ['123456', Validators.required],
+    password: ['', Validators.required],
   });
 
   // function to handle visibility of password field of form

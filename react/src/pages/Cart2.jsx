@@ -1,30 +1,9 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React from "react";
+import { useSelector } from "react-redux";
 import CartRow from "../components/CartRow";
-import {
-  setCartFromLocalStorage,
-  setCartItems,
-} from "../redux/reducers/cartReducers";
-import { syncCartData } from "../services/cartServices";
 
 const Cart = () => {
   const { cartItems } = useSelector((state) => state.cartData);
-  const { user } = useSelector((state) => state.userData);
-  const dispatch = useDispatch();
-  console.log(cartItems);
-
-  useEffect(() => {
-    // dispatch(setCartFromLocalStorage());
-    const syncCart = async () => {
-      if (user) {
-        const response = await syncCartData(cartItems);
-        console.log(response.data.items);
-        dispatch(setCartItems(response.data.items));
-      }
-    };
-
-    syncCart();
-  }, [dispatch]);
 
   return (
     <div className="relative overflow-x-auto shadow-md sm:rounded-lg">

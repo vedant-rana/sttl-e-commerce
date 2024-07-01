@@ -1,7 +1,7 @@
 import axios from "axios";
 import { serverUrl } from "../utils/envVariables";
-import { useDispatch } from "react-redux";
 
+// options for making request to server
 const requestOptions = {
   headers: {
     "Content-Type": "application/json",
@@ -9,35 +9,63 @@ const requestOptions = {
   withCredentials: true,
 };
 
+/**
+ * @purpose to sync local cart items with logged in users db
+ *
+ * @param cartItems array of cart items or object of cart item
+ * @returns POST response
+ */
 export const syncCartData = async (cartItems) => {
-  const response = await axios.post(
+  let cartData;
+
+  //checkimg whether cart item is already array or not if not then converting it
+  if (Array.isArray(cartItems)) {
+    cartData = cartItems;
+  } else {
+    cartData = [cartItems];
+  }
+
+  // sending cart data to server
+  return await axios.post(
     `${serverUrl}/cart/sync`,
-    { items: cartItems },
+    { items: cartData },
     requestOptions
   );
-  // const response = await axios.get(`${serverUrl}/cart`, requestOptions);
-
-  return response.data;
 };
 
+/**
+ * @purpose to manage cart items quantity with db cart items
+ *
+ * @param productId to find alresy exist product in cart
+ * @param quantity new updated quantity
+ * @returns PUT response
+ */
 export const manageQuantityService = async ({ productId, quantity }) => {
-  const response = await axios.put(
+  return await axios.put(
     `${serverUrl}/cart/item`,
     { productId, quantity },
     requestOptions
   );
-  return response.data;
 };
 
+/**
+ * @purpose to remove cart items from db cart items
+ *
+ * @param productId to find alresy exist product in cart and remove it
+ * @returns DELETE response
+ */
 export const removeItemService = async (productId) => {
-  const response = await axios.delete(
+  return await axios.delete(
     `${serverUrl}/cart/item/${productId}`,
     requestOptions
   );
-  return response.data;
 };
 
+/**
+ * @purpose to placing order using cart products
+ *
+ * @returns GET response
+ */
 export const processCartToOrder = async () => {
-  const response = await axios.get(`${serverUrl}/cart/process`, requestOptions);
-  return response.data;
+  return await axios.get(`${serverUrl}/cart/process`, requestOptions);
 };

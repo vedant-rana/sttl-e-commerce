@@ -32,7 +32,6 @@ export class ProductsComponent {
   }
 
   addProductTocard(cartItem: ICartItem) {
-    console.log(cartItem);
     this.cartService.addToCart(cartItem);
     this.toaster.success({
       detail: 'SUCCESS',

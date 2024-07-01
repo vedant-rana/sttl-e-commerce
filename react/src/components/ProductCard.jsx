@@ -1,34 +1,55 @@
 import React from "react";
 import { imageServer } from "../utils/envVariables";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../redux/reducers/cartReducers";
 import { Link } from "react-router-dom";
 import { useAlert } from "./AlertProvider";
+import { syncCartData } from "../services/cartServices";
 
 const ProductCard = ({ product }) => {
   const { _id, name, image, price } = product;
-  const server = imageServer;
+  const { user } = useSelector((state) => state.userData);
   const showAlert = useAlert();
+
+  // server url
+  const server = imageServer;
 
   const dispatch = useDispatch();
 
+  // function to add product to cart on add to cart button click
   const addProductToCart = (id) => {
-    dispatch(addToCart({ productId: id, name, image, price, quantity: 1 }));
-    showAlert("Product added to cart", "success");
+    // creating cart item for cart
+    const newProduct = { productId: id, name, image, price, quantity: 1 };
+
+    // checking if user has already logged in
+    if (user) {
+      // if user logged in then add product user cart in db
+      syncCartData(newProduct).then((res) => {
+        if (res.data) {
+          // handling add to cart for store
+          dispatch(addToCart(newProduct));
+          showAlert("Product added to cart", "success");
+        }
+      });
+    } else {
+      dispatch(addToCart(newProduct));
+      showAlert("Product added to cart", "success");
+    }
   };
+
   return (
-    <div className="relative my-8 flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
+    <div className="relative my-8 flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-300 bg-white shadow-md hover:shadow-2xl transition-all">
       <Link
         className="relative mx-3 mt-3 flex h-60 overflow-hidden rounded-xl items-center justify-center"
         to={`/products/${_id}`}
       >
         <img
-          className="object-cover min-w-full min-h-full"
+          className="object-contain w-full h-full"
           src={`${server}${image}`}
           alt="product image"
         />
         <span className="absolute top-0 left-0 m-2 rounded-full bg-black px-2 text-center text-sm font-medium text-white">
-          39% OFF
+          20% OFF
         </span>
       </Link>
 
@@ -41,6 +62,9 @@ const ProductCard = ({ product }) => {
         <div className="mt-2 mb-5 flex items-center justify-between">
           <p>
             <span className="text-3xl font-bold text-slate-900">₹ {price}</span>
+            <span className="text-sm ml-2 text-slate-900 line-through">
+              ₹ {Math.round(price + price * 0.2)}
+            </span>
           </p>
         </div>
         <button

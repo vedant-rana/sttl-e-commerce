@@ -3,21 +3,27 @@ import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../redux/reducers/userReducer";
 import { Link } from "react-router-dom";
 import { useAlert } from "../components/AlertProvider";
+import { syncCartData } from "../services/cartServices";
+import { setCartItems } from "../redux/reducers/cartReducers";
 
 const Login = () => {
   const dispatch = useDispatch();
   const showAlert = useAlert();
+  const { cartItems } = useSelector((state) => state.cartData);
 
+  // user login state with email and password
   const [userData, setUserData] = useState({
-    email: "test@gmail.com",
-    password: "123456",
+    email: "",
+    password: "",
   });
 
+  // hadling changes in login data fields
   const handleChange = (e) => {
     const { name, value } = e.target;
     setUserData({ ...userData, [name]: value });
   };
 
+  // handling login data submission
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -26,6 +32,7 @@ const Login = () => {
       password: userData.password,
     };
 
+    // setting user data to state object
     dispatch(loginUser(loginData)).then((data) => {
       setUserData({
         email: "",
@@ -34,6 +41,12 @@ const Login = () => {
 
       if (data.payload) {
         showAlert("User logged in successfully", "success");
+        syncCartData(cartItems).then((res) => {
+          const cartItems = res.data.data.items;
+          if (cartItems) {
+            dispatch(setCartItems(cartItems));
+          }
+        });
       }
       if (data.error) {
         showAlert(data.error.message, "error");

@@ -25,7 +25,10 @@
     >
       <div class="flex items-center justify-between w-full mb-6">
         <p class="font-normal text-xl leading-8 text-gray-400">Sub Total</p>
-        <h6 class="font-semibold text-xl leading-8 text-gray-900">
+        <h6
+          class="font-semibold text-xl leading-8 text-gray-900"
+          style="font-size: 1.5rem"
+        >
           ₹ {{ totalPrice() }}
         </h6>
       </div>
@@ -35,14 +38,22 @@
         <p class="font-normal text-xl leading-8 text-gray-400">
           Delivery Charge
         </p>
-        <h6 class="font-semibold text-xl leading-8 text-gray-900">₹ 99</h6>
+        <h6
+          class="font-semibold text-xl leading-8 text-gray-900"
+          style="font-size: 1.2rem"
+        >
+          ₹ 99
+        </h6>
       </div>
       <div class="flex items-center justify-between w-full py-6">
         <p class="font-manrope font-medium text-2xl leading-9 text-gray-900">
           Total
         </p>
-        <h6 class="font-manrope font-medium text-2xl leading-9 text-indigo-500">
-          <!-- ₹ {totalPrice() + 99} -->
+        <h6
+          class="font-manrope font-medium text-2xl leading-9 text-indigo-500"
+          style="font-size: 1.5rem"
+        >
+          ₹ {{ totalPrice() + 99 }}
         </h6>
       </div>
     </div>
@@ -61,12 +72,31 @@
   </div>
   }@else{
 
-  <div class="w-full max-w-7xl px-4 md:px-5 lg-6 mx-auto">
-    <h2
-      class="title font-manrope font-bold text-4xl leading-10 mb-8 text-center text-black"
-    >
-      Your Cart is Empty
-    </h2>
+  <div
+    class="w-full flex h-[70vh] flex-col justify-center items-center max-w-7xl px-4 md:px-5 lg-6 mx-auto gap-y-10"
+  >
+    <img
+      src="../../../assets/empty_cart.jpg"
+      alt="Empty cart"
+      class="h-[70%]"
+    />
+    <div class="text-center">
+      <h2
+        class="title font-manrope font-bold text-4xl leading-10 mb-8 text-center text-gray-700"
+      >
+        Your Cart is Empty 😔
+      </h2>
+
+      <span class="my-5 font-bold text-xl text-gray-700">
+        Add Some Products, &nbsp;
+        <a
+          routerLink="/products"
+          class="text-green-600 text-2xl underline text-center"
+        >
+          Add Now
+        </a>
+      </span>
+    </div>
   </div>
   }
 </section>

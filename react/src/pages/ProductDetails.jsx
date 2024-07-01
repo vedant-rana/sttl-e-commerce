@@ -1,58 +1,80 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { getSingleProductService } from "../services/productServices";
-import { imageServer } from "../utils/envVariables";
-import { addToCart } from "../redux/reducers/cartReducers";
-import { useDispatch } from "react-redux";
-import { useAlert } from "../components/AlertProvider";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import { useAlert } from "../components/AlertProvider";
+import { addToCart } from "../redux/reducers/cartReducers";
+import { syncCartData } from "../services/cartServices";
+import { getSingleProductService } from "../services/productServices";
+import { imageServer } from "../utils/envVariables";
 
 const ProductDetails = () => {
+  // getting id of product from params
   const { id } = useParams();
-
-  const [product, setProduct] = useState(null);
-  const [quantity, setQuantity] = useState(1);
   const dispatch = useDispatch();
   const showAlert = useAlert();
 
+  // getting user details from state
+  const { user } = useSelector((state) => state.userData);
+
+  const [product, setProduct] = useState(null);
+  const [quantity, setQuantity] = useState(1);
+
   useEffect(() => {
+    // getting product details from db on page loading
     getSingleProductService(id).then((data) => {
       setProduct(data);
     });
   }, [id]);
 
   const handleIncrement = () => {
+    // handling max quantity to 10
     if (quantity < 10) {
       setQuantity(quantity + 1);
     }
   };
 
   const handleDecrement = () => {
+    // quantity should not be less than 1
     if (quantity > 1) {
       setQuantity(quantity - 1);
     }
   };
 
+  // handling add to cart products
   const addProductToCart = () => {
-    const data = {
+    const newProduct = {
       productId: product._id,
       name: product.name,
       image: product.image,
       price: product.price,
       quantity: quantity,
     };
-    dispatch(addToCart(data));
-    showAlert("Product added to cart", "success");
+
+    if (user) {
+      // adding product to cart in db
+      syncCartData(newProduct).then((res) => {
+        // if cart product added in backend then update the local state
+        if (res.data) {
+          dispatch(addToCart(newProduct));
+          showAlert("Product added to cart", "success");
+        }
+      });
+    } else {
+      // user is not logged in then add product local cart
+      dispatch(addToCart(newProduct));
+      showAlert("Product added to cart", "success");
+    }
   };
 
   return (
-    <div className="font-sans bg-white">
+    <div className="font-sans bg-white mt-10">
       {product && (
-        <div className="p-4 lg:max-w-7xl max-w-4xl mx-auto">
-          <div className="grid items-start grid-cols-1 lg:grid-cols-5 gap-12 shadow-[0_2px_10px_-3px_rgba(6,81,237,0.3)] p-6 rounded-lg">
-            <div className="lg:col-span-3 w-full lg:sticky top-0 text-center">
-              <div className="px-4 py-10 rounded-lg shadow-[0_2px_10px_-3px_rgba(6,81,237,0.3)] relative">
+        <div className="p-4 lg:max-w-7xl max-w-4xl mx-auto ">
+          <div className="grid items-start grid-cols-1 lg:grid-cols-5 gap-12 border shadow-[0_2px_10px_-3px_rgba(6,81,237,0.3)] p-6 rounded-lg">
+            <div className="lg:col-span-3 w-full lg:sticky top-0 text-center ">
+              <div className="px-4 py-10 border rounded-lg shadow-[0_2px_10px_-3px_rgba(6,81,237,0.3)] relative">
                 <img
                   src={`${imageServer}${product.image}`}
                   alt="Product"
@@ -218,163 +240,6 @@ const ProductDetails = () => {
                 <span className="ml-4 float-right">{product.description}</span>
               </li>
             </ul>
-          </div>
-
-          <div className="mt-16 shadow-[0_2px_10px_-3px_rgba(6,81,237,0.3)] p-6">
-            <h3 className="text-xl font-bold text-gray-800">Reviews(10)</h3>
-            <div className="grid md:grid-cols-2 gap-12 mt-4">
-              <div className="space-y-3">
-                <div className="flex items-center">
-                  <p className="text-sm text-gray-800 font-bold">5.0</p>
-                  <svg
-                    className="w-5 fill-blue-600 ml-1"
-                    viewBox="0 0 14 13"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path d="M7 0L9.4687 3.60213L13.6574 4.83688L10.9944 8.29787L11.1145 12.6631L7 11.2L2.8855 12.6631L3.00556 8.29787L0.342604 4.83688L4.5313 3.60213L7 0Z" />
-                  </svg>
-                  <div className="bg-gray-400 rounded w-full h-2 ml-3">
-                    <div className="w-2/3 h-full rounded bg-blue-600"></div>
-                  </div>
-                  <p className="text-sm text-gray-800 font-bold ml-3">66%</p>
-                </div>
-
-                <div className="flex items-center">
-                  <p className="text-sm text-gray-800 font-bold">4.0</p>
-                  <svg
-                    className="w-5 fill-blue-600 ml-1"
-                    viewBox="0 0 14 13"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path d="M7 0L9.4687 3.60213L13.6574 4.83688L10.9944 8.29787L11.1145 12.6631L7 11.2L2.8855 12.6631L3.00556 8.29787L0.342604 4.83688L4.5313 3.60213L7 0Z" />
-                  </svg>
-                  <div className="bg-gray-400 rounded w-full h-2 ml-3">
-                    <div className="w-1/3 h-full rounded bg-blue-600"></div>
-                  </div>
-                  <p className="text-sm text-gray-800 font-bold ml-3">33%</p>
-                </div>
-
-                <div className="flex items-center">
-                  <p className="text-sm text-gray-800 font-bold">3.0</p>
-                  <svg
-                    className="w-5 fill-blue-600 ml-1"
-                    viewBox="0 0 14 13"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path d="M7 0L9.4687 3.60213L13.6574 4.83688L10.9944 8.29787L11.1145 12.6631L7 11.2L2.8855 12.6631L3.00556 8.29787L0.342604 4.83688L4.5313 3.60213L7 0Z" />
-                  </svg>
-                  <div className="bg-gray-400 rounded w-full h-2 ml-3">
-                    <div className="w-1/6 h-full rounded bg-blue-600"></div>
-                  </div>
-                  <p className="text-sm text-gray-800 font-bold ml-3">16%</p>
-                </div>
-
-                <div className="flex items-center">
-                  <p className="text-sm text-gray-800 font-bold">2.0</p>
-                  <svg
-                    className="w-5 fill-blue-600 ml-1"
-                    viewBox="0 0 14 13"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path d="M7 0L9.4687 3.60213L13.6574 4.83688L10.9944 8.29787L11.1145 12.6631L7 11.2L2.8855 12.6631L3.00556 8.29787L0.342604 4.83688L4.5313 3.60213L7 0Z" />
-                  </svg>
-                  <div className="bg-gray-400 rounded w-full h-2 ml-3">
-                    <div className="w-1/12 h-full rounded bg-blue-600"></div>
-                  </div>
-                  <p className="text-sm text-gray-800 font-bold ml-3">8%</p>
-                </div>
-
-                <div className="flex items-center">
-                  <p className="text-sm text-gray-800 font-bold">1.0</p>
-                  <svg
-                    className="w-5 fill-blue-600 ml-1"
-                    viewBox="0 0 14 13"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path d="M7 0L9.4687 3.60213L13.6574 4.83688L10.9944 8.29787L11.1145 12.6631L7 11.2L2.8855 12.6631L3.00556 8.29787L0.342604 4.83688L4.5313 3.60213L7 0Z" />
-                  </svg>
-                  <div className="bg-gray-400 rounded w-full h-2 ml-3">
-                    <div className="w-[6%] h-full rounded bg-blue-600"></div>
-                  </div>
-                  <p className="text-sm text-gray-800 font-bold ml-3">6%</p>
-                </div>
-              </div>
-
-              <div>
-                <div className="flex items-start">
-                  <img
-                    src="https://readymadeui.com/team-2.webp"
-                    className="w-12 h-12 rounded-full border-2 border-white"
-                  />
-                  <div className="ml-3">
-                    <h4 className="text-sm font-bold text-gray-800">
-                      John Doe
-                    </h4>
-                    <div className="flex space-x-1 mt-1">
-                      <svg
-                        className="w-4 fill-blue-600"
-                        viewBox="0 0 14 13"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path d="M7 0L9.4687 3.60213L13.6574 4.83688L10.9944 8.29787L11.1145 12.6631L7 11.2L2.8855 12.6631L3.00556 8.29787L0.342604 4.83688L4.5313 3.60213L7 0Z" />
-                      </svg>
-                      <svg
-                        className="w-4 fill-blue-600"
-                        viewBox="0 0 14 13"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path d="M7 0L9.4687 3.60213L13.6574 4.83688L10.9944 8.29787L11.1145 12.6631L7 11.2L2.8855 12.6631L3.00556 8.29787L0.342604 4.83688L4.5313 3.60213L7 0Z" />
-                      </svg>
-                      <svg
-                        className="w-4 fill-blue-600"
-                        viewBox="0 0 14 13"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path d="M7 0L9.4687 3.60213L13.6574 4.83688L10.9944 8.29787L11.1145 12.6631L7 11.2L2.8855 12.6631L3.00556 8.29787L0.342604 4.83688L4.5313 3.60213L7 0Z" />
-                      </svg>
-                      <svg
-                        className="w-4 fill-[#CED5D8]"
-                        viewBox="0 0 14 13"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path d="M7 0L9.4687 3.60213L13.6574 4.83688L10.9944 8.29787L11.1145 12.6631L7 11.2L2.8855 12.6631L3.00556 8.29787L0.342604 4.83688L4.5313 3.60213L7 0Z" />
-                      </svg>
-                      <svg
-                        className="w-4 fill-[#CED5D8]"
-                        viewBox="0 0 14 13"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path d="M7 0L9.4687 3.60213L13.6574 4.83688L10.9944 8.29787L11.1145 12.6631L7 11.2L2.8855 12.6631L3.00556 8.29787L0.342604 4.83688L4.5313 3.60213L7 0Z" />
-                      </svg>
-                      <p className="text-xs !ml-2 font-semibold text-gray-800">
-                        2 mins ago
-                      </p>
-                    </div>
-                    <p className="text-sm mt-4 text-gray-800">
-                      Lorem ipsum dolor sit amet, consectetur adipisci elit, sed
-                      eiusmod tempor incidunt ut labore et dolore magna aliqua.
-                    </p>
-                  </div>
-                </div>
-
-                <button
-                  type="button"
-                  className="w-full mt-10 px-4 py-2.5 bg-transparent hover:bg-gray-50 border border-blue-600 text-gray-800 font-bold rounded"
-                >
-                  Read all reviews
-                </button>
-              </div>
-            </div>
           </div>
         </div>
       )}

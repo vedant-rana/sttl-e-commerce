@@ -39,9 +39,8 @@ export class RegisterComponent {
   toaster = inject(NgToastService);
   constructor(
     private userService: UserService,
-    private router: Router
-  ) // private toaster: NgToastService
-  {}
+    private router: Router // private toaster: NgToastService
+  ) {}
 
   // injecting the FormBuilder to create form group
   formBuilder = inject(FormBuilder);
@@ -55,7 +54,7 @@ export class RegisterComponent {
     {
       // name : required, should only contain alphabets and spaces, characters required 2 to 30
       name: [
-        'ang',
+        '',
         [
           Validators.required,
           Validators.pattern(/^[a-zA-Z\s]+$/),
@@ -65,19 +64,16 @@ export class RegisterComponent {
       ],
 
       // email : required, should be a valid email address
-      email: ['ang1@gmail.com', [Validators.email, Validators.required]],
+      email: ['', [Validators.email, Validators.required]],
 
       // name : required, should only contain 10 digits
-      phone: [
-        '1234567890',
-        [Validators.required, Validators.pattern(/^\d{10}$/)],
-      ],
+      phone: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]],
 
       //password : required, minimum 6 letters required
-      password: ['123456', [Validators.required, Validators.minLength(6)]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
 
       //confirm password : required, should match with password field
-      confirmPassword: ['123456', Validators.required],
+      confirmPassword: ['', Validators.required],
     },
     {
       // custom validator checking both passwords are same or not
